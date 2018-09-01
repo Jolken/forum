@@ -1,0 +1,24 @@
+{
+  "name": "forum",
+  "version": "0.0.1",
+  "description": "forum",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "jolken & others",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "crypto": "^1.0.1",
+    "express": "^4.16.3",
+    "fsevents": "^1.1.2",
+    "pg": "^7.4.3",
+    "pg-promise": "^8.4.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  }
+}
