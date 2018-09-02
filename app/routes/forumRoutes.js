@@ -6,7 +6,7 @@ module.exports = (app) => {
     });
 
     app.post('/auth/login', (req,res) => {
-        let login = (res, check) => {
+        let login = (check) => {
             if (check) {
                 let token = utils.generate.token(req.body.user);
                 res.send(token);
@@ -15,10 +15,29 @@ module.exports = (app) => {
                 res.send('incorrect data');
             }
         };
-        utils.check.password(req.body.user, req.body.pass, login, res);
+        utils.check.password(req.body.user, req.body.pass, login);
     });
 
-    app.post('/auth/register');
+    app.post('/auth/register', (req, res) => {
+        let success = (status) => {
+            if (status) {
+                let token = utils.generate.token(req.body.user);
+                res.send(token);
+            }
+            else {
+                res.send('bad request');
+            }
+        }
+        let unique = (isUniqe) => {
+            if (isUniqe) {
+                utils.new.user(req.body.user, req.body.pass, req.body.email, success);
+            }
+            else {
+                res.send('error')
+            }
+        }
+        utils.check.username(req.body.user, unique);
+    });
     
     app.put('/auth/update');
     

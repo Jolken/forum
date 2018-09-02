@@ -3,12 +3,35 @@ const dbUtils = require(APP_ROOT+'/app/utils/dbUtils');
 
 module.exports = {
     check : {
-        password : (username, password, login, res) => {
-           dbUtils.compare.password(username, password, login, res);//compare password
+        password : (username, password, callback) => {
+            let compare = (dbResponse) => {
+                try {
+                    callback(dbResponse.rows[0].pass === password);    
+                }
+                catch (e) {
+                    callback(false);
+                }
+            };
+            dbUtils.get.password(username, compare);
+           
         },
         token : (username, token) => {
             return 1;
         },
+        username : (username, unique) => { 
+            let check = (dbResponse) => {
+                try {
+                    if (dbResponse.rows[0].username === username) {
+                        unique(false);
+                    }
+                }
+                catch (e) {
+                    unique(true);
+                }
+
+            }
+            dbUtils.get.username(username, check);
+        }
 
     },
     
@@ -19,6 +42,13 @@ module.exports = {
             return token;
         },
     },
+
+    new : {
+        user: (username, password, email, success) => {
+            dbUtils.create.user(username, password, null, 0, 11112011, email, success);
+        }
+    },
+
     db : dbUtils,
 
 }
