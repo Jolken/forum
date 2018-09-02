@@ -13,6 +13,11 @@ module.exports = {
                 .then(res => callback(res))
                 .catch(err => callback(err));
         },
+        token: (username, callback) => {
+            pool.query(`SELECT token FROM users WHERE username = '${username}'`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        },
 
 
     },
@@ -29,7 +34,6 @@ module.exports = {
 
     },
     update: {
-
         token: (username, token) => {
             pool.query(`UPDATE users SET token = '${token}' WHERE username = '${username}'`)
                 .then()
@@ -37,7 +41,11 @@ module.exports = {
         },
     },
     delete: {
-
+        user: (username, callback) => {
+            pool.query(`DELETE FROM users WHERE username = '${username}'`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        },
 
     }
 }

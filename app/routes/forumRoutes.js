@@ -28,7 +28,7 @@ module.exports = (app) => {
                 res.send('bad request');
             }
         }
-        let unique = (isUniqe) => {
+        let uniqueUser = (isUniqe) => {
             if (isUniqe) {
                 utils.new.user(req.body.user, req.body.pass, req.body.email, success);
             }
@@ -36,12 +36,39 @@ module.exports = (app) => {
                 res.send('error')
             }
         }
-        utils.check.username(req.body.user, unique);
+        utils.check.username(req.body.user, uniqueUser);
     });
     
     app.put('/auth/update');
     
-    app.delete('/auth/delete');
+    app.delete('/auth/delete', (req, res) => {
+        let tokenCheck = (status) => {
+            if (status) {
+                utils.check.token(req.body.user, req.body.token, success);
+            }
+            else {
+                res.send('incorrect data');
+            }
+        }
+        let success = (status) => {
+            if (status) {
+                res.send('deleted');
+                utils.remove.user(req.body.user, req.body.pass, req.body.token, deleted);
+            }
+            else {
+                res.send('incorrect data');
+            }
+        };
+        let deleted = (status) => {
+            if (status) {
+                res.send('deleted');
+            }
+            else {
+                res.send('error');
+            }
+        }
+        utils.check.password(req.body.user, req.body.pass, tokenCheck);
+    });
 
 
     app.get('/threads/', (req, res) => {

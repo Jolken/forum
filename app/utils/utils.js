@@ -15,18 +15,26 @@ module.exports = {
             dbUtils.get.password(username, compare);
            
         },
-        token : (username, token) => {
-            return 1;
+        token : (username, token, callback) => {
+            let compare = (dbResponse) => {
+                try {
+                    callback(dbResponse.rows[0].token === token);
+                }
+                catch (e) {
+                    callback(false);
+                }
+            };
+            dbUtils.get.token(username, compare);
         },
-        username : (username, unique) => { 
+        username : (username, callback) => { 
             let check = (dbResponse) => {
                 try {
                     if (dbResponse.rows[0].username === username) {
-                        unique(false);
+                        callback(false);
                     }
                 }
                 catch (e) {
-                    unique(true);
+                    callback(true);
                 }
 
             }
@@ -46,6 +54,12 @@ module.exports = {
     new : {
         user: (username, password, email, success) => {
             dbUtils.create.user(username, password, null, 0, 11112011, email, success);
+        }
+    },
+
+    remove : {
+        user: (username, callback) => {
+            dbUtils.delete.user(username, callback);
         }
     },
 
