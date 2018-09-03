@@ -18,19 +18,26 @@ module.exports = {
                 .then(res => callback(res))
                 .catch(err => callback(err));
         },
+        //threads
 
 
     },
     create: {
-        user: (username, password, token, lvl, date, email, success) => {
+        user: (username, password, token, lvl, date, email, callback) => {
             pool.query(`INSERT INTO users VALUES ('${username}','${password}','${token}',${lvl},${date},'${email}');`)
                 .then(res => {
-                    success(1);
+                    callback(1);
                 })
                 .catch(err => {
-                    success(0);
+                    callback(0);
                 });
-        }
+        },
+        thread: (name, moders, callback) => {
+            pool.query(`INSERT INTO threads VALUES ('${name}', ${moders});`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        },
+
 
     },
     update: {

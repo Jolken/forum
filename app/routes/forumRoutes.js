@@ -6,7 +6,7 @@ module.exports = (app) => {
     });
 
     app.post('/auth/login', (req,res) => {
-        let login = (check) => {
+        let success = (check) => {
             if (check) {
                 let token = utils.generate.token(req.body.user);
                 res.send(token);
@@ -15,7 +15,7 @@ module.exports = (app) => {
                 res.send('incorrect data');
             }
         };
-        utils.check.password(req.body.user, req.body.pass, login);
+        utils.check.password(req.body.user, req.body.pass, success);
     });
 
     app.post('/auth/register', (req, res) => {
@@ -87,11 +87,28 @@ module.exports = (app) => {
         res.send({ 'id': req.params.id });
     });
 
-
+    /*
     app.post('/threads/', (req, res) => {
-        res.send('Want to create new thread?');
-    });
+        let success = (status) => {
+            if (status) {
+                utils.new.thread(req.body.name, req.body.moders.split(' '), created);
+            }
+            else {
+                res.send('incorrect data');
+            }
+        };
+        let created = (status) => {
+            if (status) {
+                res.send('thread created')
+            }
+            else {
+                res.send('thread not created');
+            }
+        };
+        utils.check.token
 
+    });
+    */
     app.post('/threads/:thread/', (req, res) => {
         res.send('Want to create new request in ' + req.params.thread + '?');
     });

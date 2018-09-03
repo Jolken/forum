@@ -52,8 +52,11 @@ module.exports = {
     },
 
     new : {
-        user: (username, password, email, success) => {
-            dbUtils.create.user(username, password, null, 0, 11112011, email, success);
+        user: (username, password, email, callback) => {
+            dbUtils.create.user(username, password, null, 0, 11112011, email, callback);
+        },
+        thread: (name, moders, callback) => {
+            dbUtils.create.thread(name, moders, callback);
         }
     },
 
