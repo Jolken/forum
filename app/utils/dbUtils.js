@@ -18,7 +18,21 @@ module.exports = {
                 .then(res => callback(res))
                 .catch(err => callback(err));
         },
-        //threads
+        threads: (callback) => {
+            pool.query(`SELECT * FROM threads;`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        },
+        thread: (name, callback) => {
+            pool.query(`SELECT * FROM ${name}`)
+                .then(res => callback(res))
+                .catch(err => callback(err))
+        },
+        threadName: (name, callback) => {
+            pool.query(`SELECT name FROM threads WHERE name = '${name}';`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        }
 
 
     },
@@ -32,10 +46,22 @@ module.exports = {
                     callback(0);
                 });
         },
-        thread: (name, moders, callback) => {
-            pool.query(`INSERT INTO threads VALUES ('${name}', ${moders});`)
-                .then(res => callback(res))
-                .catch(err => callback(err));
+        thread: (name, callback) => {
+            pool.query(`INSERT INTO threads VALUES ('${name}');`)
+                .then(res => callback(1))
+                .catch(err => callback(0));
+        },
+        table: (name, callback) => {
+            pool.query(`CREATE TABLE ${name} (
+                        	id		serial,
+                        	owner 	text,
+                        	body	text,
+                        	title	text,
+                        	date	int,
+                        	minlvl	smallint
+                        );`)
+                .then(res => callback(1))
+                .catch(err => callback(0));
         },
 
 

@@ -72,11 +72,17 @@ module.exports = (app) => {
 
 
     app.get('/threads/', (req, res) => {
-        res.send('threads');
+        let sendResponse = (data) => {
+            res.send(data);
+        }
+        utils.get.threads(sendResponse)
     });
 
     app.get('/threads/:thread/', (req, res) => {
-        res.send(req.params.thread);
+        let sendResponse = (data) => {
+            res.send(data);
+        }
+        utils.get.thread(req.params.thread, sendResponse)
     });
 
     app.get('/threads/:thread/:id', (req, res) => {
@@ -87,11 +93,19 @@ module.exports = (app) => {
         res.send({ 'id': req.params.id });
     });
 
-    /*
+    
     app.post('/threads/', (req, res) => {
+        let tokenCheck= (status) => {
+            if (status) {
+                utils.check.token(req.body.user, req.body.token, success);
+            }
+            else {
+                res.send('thread exist');
+            }
+        };
         let success = (status) => {
             if (status) {
-                utils.new.thread(req.body.name, req.body.moders.split(' '), created);
+                utils.new.thread(req.body.name, created);
             }
             else {
                 res.send('incorrect data');
@@ -105,10 +119,10 @@ module.exports = (app) => {
                 res.send('thread not created');
             }
         };
-        utils.check.token
+        utils.check.thread(req.body.name, tokenCheck);
 
     });
-    */
+    
     app.post('/threads/:thread/', (req, res) => {
         res.send('Want to create new request in ' + req.params.thread + '?');
     });
