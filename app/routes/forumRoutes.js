@@ -36,7 +36,7 @@ module.exports = (app) => {
                 res.send('error')
             }
         }
-        utils.check.username(req.body.user, uniqueUser);
+        utils.check.usernameAvaible(req.body.user, uniqueUser);
     });
     
     app.put('/auth/update');
@@ -52,7 +52,6 @@ module.exports = (app) => {
         }
         let success = (status) => {
             if (status) {
-                res.send('deleted');
                 utils.remove.user(req.body.user, req.body.pass, req.body.token, deleted);
             }
             else {
@@ -124,15 +123,12 @@ module.exports = (app) => {
     });
     
     app.post('/threads/:thread/', (req, res) => {
-        res.send('Want to create new request in ' + req.params.thread + '?');
+        res.send('Want to create new post in ' + req.params.thread + '?');
+
     });
 
     app.post('/threads/:thread/:id', (req, res) => {
         res.send('Want to create new comment in ' + req.params.id + '?');
-    });
-
-    app.post('/users/', (req, res) => {
-        res.send('Want to create new user?');
     });
 
 

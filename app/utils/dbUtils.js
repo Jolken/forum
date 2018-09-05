@@ -3,6 +3,11 @@ var dbConfig = require(APP_ROOT + '/config/db.js');
 var pool = new pg.Pool(dbConfig);
 module.exports = {
     get: {
+        usernameByToken: (token, callback) => {
+            pool.query(`SELECT username FROM users WHERE username = '${username}'`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        },
         username: (username, callback) => {
             pool.query(`SELECT username FROM users WHERE username = '${username}'`)
                 .then(res => callback(res))
@@ -26,13 +31,24 @@ module.exports = {
         thread: (name, callback) => {
             pool.query(`SELECT * FROM ${name}`)
                 .then(res => callback(res))
-                .catch(err => callback(err))
+                .catch(err => callback(err));
         },
         threadName: (name, callback) => {
             pool.query(`SELECT name FROM threads WHERE name = '${name}';`)
                 .then(res => callback(res))
                 .catch(err => callback(err));
+        },
+        postLastId: (thread, callback) => {
+            pool.query(`'SELECT id FROM ${thread} ORDER BY id DESC LIMIT 1;`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
+        },
+        userLvl : (name, callback) => {
+            pool.query(`SELECT lvl FROM users WHERE username = '${name}'`)
+                .then(res => callback(res))
+                .catch(err => callback(err));
         }
+
 
 
     },

@@ -27,5 +27,3 @@ CREATE TABLE example (
 	date	int,
 	minlvl	smallint
 );
-
-INSERT INTO code VALUES (1, 'su', 'asd', 'das', 27082018, 1);

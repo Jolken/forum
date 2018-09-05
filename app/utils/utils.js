@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const dbUtils = require(APP_ROOT + '/app/utils/dbUtils');
 
-module.exports = {
+var utils = {
     check: {
         password: (username, password, callback) => {
             let compare = (dbResponse) => {
@@ -12,7 +12,7 @@ module.exports = {
                     callback(false);
                 }
             };
-            dbUtils.get.password(username, compare);
+            utils.get.password(username, compare);
 
         },
         token: (username, token, callback) => {
@@ -24,9 +24,9 @@ module.exports = {
                     callback(false);
                 }
             };
-            dbUtils.get.token(username, compare);
+            utils.get.token(username, compare);
         },
-        username: (username, callback) => {
+        usernameAvaible: (username, callback) => {
             let check = (dbResponse) => {
                 try {
                     callback(!(dbResponse.rows[0].username === username));
@@ -36,7 +36,7 @@ module.exports = {
                 }
 
             }
-            dbUtils.get.username(username, check);
+            utils.get.username(username, check);
         },
         thread: (name, callback) => {
             let check = (dbResponse) => {
@@ -47,7 +47,18 @@ module.exports = {
                     callback(1);
                 }
             }
-            dbUtils.get.threadName(name, check);
+            utils.get.threadName(name, check);
+        },
+        access : (username, minlvl, callback) => {
+            let check = (dbResponse) => {
+                try {
+                    callback(dbResponse.rows[0].lvl >= minlvl);
+                }
+                catch (e) {
+                    callback(0)
+                }
+            };
+            dbUtils.get.userLvl(username, check);
         },
 
     },
@@ -62,6 +73,8 @@ module.exports = {
 
     new: {
         user: (username, password, email, callback) => {
+            //utils.check.token();
+            //utils.check.usernameAvaible();
             dbUtils.create.user(username, password, null, 0, 11112011, email, callback);
         },
         thread: (name, callback) => {
@@ -73,13 +86,27 @@ module.exports = {
                     callback(0)
                 }
             };
+            //utils.check.thread();
+            //utils.check.token();
+            //lvl
+            //utils.new.thread();
+            //inserted
 
             dbUtils.create.thread(name, inserted);
+        },
+        post: () => {
+            //token
+            //lvl
+            //create
+            //success
         }
     },
 
     remove: {
         user: (username, callback) => {
+            //token
+            //password
+            //success
             dbUtils.delete.user(username, callback);
         }
     },
@@ -106,9 +133,34 @@ module.exports = {
                 }
             };
             dbUtils.get.thread(name, check);
+            let check = (dbResponse) => {
+                try {
+                    callback(dbResponse.rows[0].lvl);
+                }
+                catch (e) {
+                    callback(0);
+                }
+            };
+            dbUtilaccess : (username, lvl, minlvl) => {
+            
+            },(name, check);
         },
+        postLastId : (thread, callback) => {
+            let check = (dbResponse) => {
+                try {
+                    callback(dbResponse.rows[0].id);
+                }
+                catch (e) {
+                    callback(0);
+                }
+            };
+            dbUtils.get.postLastId(thread, check);
+        }
     },
 
     db: dbUtils,
 
 }
+
+
+module.exports = utils;
