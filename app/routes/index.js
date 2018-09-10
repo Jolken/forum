@@ -1,4 +1,7 @@
 const forumRoutes = require('./forumRoutes');
+const auth = require('./auth');  
+const threads = require('./threads');
 module.exports = (app) => {
-    forumRoutes(app);
-}
+    app.use('/auth', auth);
+    app.use('/threads', threads);
+};
