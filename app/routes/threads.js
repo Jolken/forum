@@ -1,41 +1,28 @@
-var utils = require(APP_ROOT + '/app/utils/utils');
+const utils = require(APP_ROOT + '/app/utils/utils');
 const Router = require('express-promise-router');
 const router = new Router();
 
 module.exports = router;
 
-router.get('/', (req, res) => {
-    let sendResponse = (data) => {
-        res.send(data);
-    }
-    utils.get.threads(sendResponse)
+router.get('/', async (req, res) => {
+    let threads = await utils.get.threads();
+    res.send(threads);
 });
 
-router.post('/', (req, res) => {
-    let tokenCheck = (status) => {
-        if (status) {
-            utils.check.token(req.body.user, req.body.token, success);
-        }
-        else {
-            res.send('thread exist');
-        }
-    };
-    let success = (status) => {
-        if (status) {
-            utils.new.thread(req.body.name, created);
-        }
-        else {
-            res.send('incorrect data');
-        }
-    };
-    let created = (status) => {
-        if (status) {
-            res.send('thread created')
-        }
-        else {
-            res.send('thread not created');
-        }
-    };
-    utils.check.thread(req.body.name, tokenCheck);
+router.post('/', async (req, res) => {
+    let newThread = await utils.new.thread(req.body.token, req.body.user, req.body.name);
+    res.send(newThread);
 
+});
+
+router.delete('/', async (req, res) => {
+    let threadName = req.params.threadName || req.body.name;
+    let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
+    res.send(deleted);
+});
+
+router.delete('/:threadName', async (req, res) => {
+    let threadName = req.params.threadName || req.body.name;
+    let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
+    res.send(deleted);
 });

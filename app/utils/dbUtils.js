@@ -1,7 +1,7 @@
 const pg = require('pg');
-var dbConfig = require(APP_ROOT + '/config/db.js');
-var pool = new pg.Pool(dbConfig);
-module.exports = {
+const dbConfig = require(APP_ROOT + '/config/db.js');
+let pool = new pg.Pool(dbConfig);
+let dbUtils = {
     get: {
         usernameByToken: (token) => {
             return pool.query(`SELECT username FROM users WHERE token = '${token}'`)
@@ -19,8 +19,8 @@ module.exports = {
             return await pool.query(`SELECT token FROM users WHERE username = '${username}'`)
 
         },
-        threads: () => {
-            return  pool.query(`SELECT * FROM threads;`)
+        threads: async () => {
+            return await pool.query(`SELECT * FROM threads;`);
 
         },
         thread: (name,) => {
@@ -53,13 +53,13 @@ module.exports = {
             //       (0);
             //    });
         },
-        thread: (name,) => {
-            return pool.query(`INSERT INTO threads VALUES ('${name}');`)
+        thread: async (name) => {
+            return await pool.query(`INSERT INTO threads VALUES ('${name}');`)
             //    .then(res =>(1))
             //    .catch(err =>(0));
         },
-        table: (name,) => {
-            return pool.query(`CREATE TABLE ${name} (
+        table: async (name) => {
+            return await pool.query(`CREATE TABLE ${name} (
                         	id		serial,
                         	owner 	text,
                         	body	text,
@@ -81,11 +81,19 @@ module.exports = {
         },
     },
     delete: {
-        user: async (username,) => {
+        user: async (username) => {
             return await pool.query(`DELETE FROM users WHERE username = '${username}'`)
             //    .then(res =>(res))
             //    .catch(err =>(err));
         },
+        table: async (name) => {
+            return await pool.query(`DROP TABLE ${name};`)
+        },
+        thread: async (name) => {
+            return await pool.query(`DELETE FROM threads WHERE name = '${name}'`)
+        }
 
     }
 }
+
+module.exports = dbUtils;

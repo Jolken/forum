@@ -3,6 +3,7 @@ const dbUtils = require(APP_ROOT + '/app/utils/dbUtils');
 const pg = require('pg');
 var dbConfig = require(APP_ROOT + '/config/db.js');
 var pool = new pg.Pool(dbConfig);
+const ADMIN = 'jolken';
 
 var utils = {
     check: {
@@ -186,7 +187,7 @@ var utilsNew = {
 
     check: {
         password: async (username, password) => {
-            let dbResponse  = await dbUtils.get.password(username);
+            let dbResponse = await dbUtils.get.password(username);
             try {
                 return password == dbResponse.rows[0].pass;
             }
@@ -220,7 +221,11 @@ var utilsNew = {
         password: async (username) => {
             let dbResponse = await dbUtils.get.password(username);
             return dbResponse.rows[0].pass;
-        }
+        },
+        threads: async () => {
+            let dbResponse = await dbUtils.get.threads();
+            return dbResponse.rows;
+        },
     },
 
     new: {
@@ -237,6 +242,22 @@ var utilsNew = {
                 return 0;
             }
         },
+        thread: async (token, username, threadName) => {
+            if (username === ADMIN) {
+                if (await utilsNew.check.token(username, token)) {
+                    let inserted =  await dbUtils.create.thread(threadName);
+                    if (inserted){
+                        return await dbUtils.create.table(threadName);
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                else {
+                    return 0;
+                }
+            }
+        },
 
     },
 
@@ -251,6 +272,22 @@ var utilsNew = {
                 return 0;
             }
         },
+        thread: async (token, username, threadName) => {
+            if (username === ADMIN) {
+                if (await utilsNew.check.token(username, token)) {
+                    let tableDeleted = await dbUtils.delete.table(threadName);
+                    if (tableDeleted) {
+                        return await dbUtils.delete.thread(threadName);
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                else {
+                    return 0;
+                }
+            }
+        },
     },
 
     generate: {
@@ -258,7 +295,7 @@ var utilsNew = {
             let token = crypto.randomBytes(256).toString('hex');
             if (await dbUtils.update.token(username, token)) {
                 return token;
-            } 
+            }
             return 0;
         },
     },

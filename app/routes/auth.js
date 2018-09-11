@@ -8,7 +8,8 @@ var pool = new pg.Pool(dbConfig);
 module.exports = router;
 
 router.post('/login', async (req, res) => {
-    res.send(await utils.functions.login(req.body.user, req.body.pass));
+    let token = await utils.functions.login(req.body.user, req.body.pass);
+    res.send(token);
 });
 
 router.post('/register', async (req, res) => {
@@ -29,7 +30,8 @@ router.post('/register', async (req, res) => {
 //router.put('/auth/update');
 
 router.delete('/delete', async (req, res) => {
-    res.send(await utils.delete.user(req.body.user, req.body.token, req.body.pass));
+    let deleted = await utils.delete.user(req.body.user, req.body.token, req.body.pass);
+    res.send(deleted);
     /*
     let tokenCheck = (status) => {
         if (status) {
