@@ -3,8 +3,8 @@ const dbConfig = require(APP_ROOT + '/config/db.js');
 let pool = new pg.Pool(dbConfig);
 let dbUtils = {
     get: {
-        usernameByToken: (token) => {
-            return pool.query(`SELECT username FROM users WHERE token = '${token}'`)
+        usernameByToken: async (token) => {
+            return await pool.query(`SELECT username FROM users WHERE token = '${token}'`)
             
         },
         username: async (username) => {
@@ -12,6 +12,7 @@ let dbUtils = {
 
         },
         password: async (username) => {
+            console.log(username);
             return await pool.query(`SELECT pass FROM users WHERE username = '${username}'`)
 
         },
@@ -23,16 +24,16 @@ let dbUtils = {
             return await pool.query(`SELECT * FROM threads;`);
 
         },
-        thread: (name,) => {
-            return pool.query(`SELECT * FROM ${name}`)
+        posts: async (thread) => {
+            return await pool.query(`SELECT * FROM ${thread}`)
 
         },
         threadName: (name,) => {
             return pool.query(`SELECT name FROM threads WHERE name = '${name}';`)
 
         },
-        postLastId: (thread,) => {
-            return pool.query(`'SELECT id FROM ${thread} ORDER BY id DESC LIMIT 1;`)
+        postLastId: async (thread) => {
+            return await pool.query(`SELECT id FROM ${thread} ORDER BY id DESC LIMIT 1;`)
 
         },
         userLvl : (name,) => {
@@ -58,7 +59,7 @@ let dbUtils = {
             //    .then(res =>(1))
             //    .catch(err =>(0));
         },
-        table: async (name) => {
+        threadTable: async (name) => {
             return await pool.query(`CREATE TABLE ${name} (
                         	id		serial,
                         	owner 	text,
@@ -69,6 +70,19 @@ let dbUtils = {
                         );`)
                 //.then(res =>(1))
                 //.catch(err =>(0));
+        },
+        post: async (thread ,id, owner, body, title, date, minlvl) => {
+            
+            return await pool.query(`INSERT INTO ${thread}VALUES (${id},'${owner}','${body}','${title}',${date},${minlvl})`);
+        },
+        postTable: async (thread, id) => {
+            return await pool.query(`CREATE TABLE "${thread}${id}"
+            (
+                    	owner 	text,
+	                    body	text,
+	                    createDate	int,
+	                    id		int	
+            )`);
         },
 
 

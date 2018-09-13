@@ -226,6 +226,10 @@ var utilsNew = {
             let dbResponse = await dbUtils.get.threads();
             return dbResponse.rows;
         },
+        posts: async (thread) => {
+            let dbResponse = await dbUtils.get.posts(thread);
+            return dbResponse.rows;
+        },
     },
 
     new: {
@@ -247,7 +251,7 @@ var utilsNew = {
                 if (await utilsNew.check.token(username, token)) {
                     let inserted =  await dbUtils.create.thread(threadName);
                     if (inserted){
-                        return await dbUtils.create.table(threadName);
+                        return await dbUtils.create.threadTable(threadName);
                     }
                     else {
                         return 0;
@@ -255,6 +259,16 @@ var utilsNew = {
                 }
                 else {
                     return 0;
+                }
+            }
+        },
+        post: async (token, threadName, title, body) => {
+            let username = await dbUtils.get.usernameByToken(token);
+            if (await utilsNew.check.token(username.rows[0].username, token)) {
+                let lastId = await dbUtils.get.postLastId(threadName);
+                let inserted = await dbUtils.create.post(threadName, lastId, username, body, title, 1, 1);
+                if (inserted) {
+                    return await dbUtils.create.postTable(threadName, lastId);
                 }
             }
         },

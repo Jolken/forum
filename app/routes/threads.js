@@ -26,3 +26,13 @@ router.delete('/:threadName', async (req, res) => {
     let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
     res.send(deleted);
 });
+
+router.get('/:threadName/', async (req, res) => {
+    let posts = await utils.get.posts(req.params.threadName);
+    res.send(posts);
+});
+
+router.post('/:threadName/', async (req, res) => {
+    let created = await utils.new.post(req.body.token, req.params.threadName, req.body.title, req.body.text);
+    res.send(created);
+});
