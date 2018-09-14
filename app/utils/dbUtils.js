@@ -37,9 +37,11 @@ let dbUtils = {
 
         },
         userLvl : (name,) => {
-            return pool.query(`SELECT lvl FROM users WHERE username = '${name}'`)
-
-        }
+            return pool.query(`SELECT lvl FROM users WHERE username = '${name}'`);
+        },
+        postOwner: async (thread, id) => {
+            return await pool.query(`SELECT owner FROM ${thread} WHERE id=${id}`);
+        },
 
 
 
@@ -72,8 +74,8 @@ let dbUtils = {
                 //.catch(err =>(0));
         },
         post: async (thread ,id, owner, body, title, date, minlvl) => {
-            
-            return await pool.query(`INSERT INTO ${thread}VALUES (${id},'${owner}','${body}','${title}',${date},${minlvl})`);
+            return await pool.query(`INSERT INTO "${thread}" (id, owner, body, title, date, minlvl) VALUES (${id},'${owner}','${body}','${title}',${date},${minlvl})`);
+            //(${id},'${owner}','${body}','${title}',${date},${minlvl})
         },
         postTable: async (thread, id) => {
             return await pool.query(`CREATE TABLE "${thread}${id}"
@@ -105,6 +107,9 @@ let dbUtils = {
         },
         thread: async (name) => {
             return await pool.query(`DELETE FROM threads WHERE name = '${name}'`)
+        },
+        post: async (thread, id) => {
+            return await pool.query(`DELETE FROM "${thread}" WHERE id=${id}`)
         }
 
     }

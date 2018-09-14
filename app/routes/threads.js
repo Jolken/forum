@@ -36,3 +36,8 @@ router.post('/:threadName/', async (req, res) => {
     let created = await utils.new.post(req.body.token, req.params.threadName, req.body.title, req.body.text);
     res.send(created);
 });
+
+router.delete('/:threadName/:postId/', async (req, res) => {
+    let deleted = await utils.delete.post(req.body.token, req.params.threadName, req.params.postId);
+    res.send(deleted);
+});
