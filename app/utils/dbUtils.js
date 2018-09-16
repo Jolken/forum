@@ -28,6 +28,12 @@ let dbUtils = {
             return await pool.query(`SELECT * FROM ${thread}`)
 
         },
+        post: async (thread, id) => {
+            return await pool.query(`SELECT * FROM ${thread} WHERE id = ${id}`);
+        },
+        comments: async (thread, id) => {
+            return await pool.query(`SELECT * FROM ${thread}${id}`);
+        },
         threadName: (name,) => {
             return pool.query(`SELECT name FROM threads WHERE name = '${name}';`)
 

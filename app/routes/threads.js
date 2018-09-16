@@ -41,3 +41,11 @@ router.delete('/:threadName/:postId/', async (req, res) => {
     let deleted = await utils.delete.post(req.body.token, req.params.threadName, req.params.postId);
     res.send(deleted);
 });
+
+router.get('/:threadName/:postId/', async (req, res) => {
+    let postNComments = {
+        post: await utils.get.post(req.params.threadName, req.params.postId),
+        comments: await utils.get.comments(req.params.threadName, req.params.postId),
+    }
+    res.send(postNComments);
+});

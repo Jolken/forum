@@ -62,6 +62,14 @@ var utilsNew = {
             let dbResponse = await dbUtils.get.posts(thread);
             return dbResponse.rows;
         },
+        post: async (thread, id) => {
+            let dbResponse = await dbUtils.get.post(thread, id);
+            return dbResponse.rows[0];
+        },
+        comments: async (thread, id) => {
+            let dbResponse = await dbUtils.get.comments(thread, id);
+            return dbResponse.rows;
+        } 
     },
 
     new: {
