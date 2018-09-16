@@ -1,9 +1,10 @@
-var utils = require(APP_ROOT + '/app/utils/utils');
+/*
+    this code works only with users
+*/
+const utils = require(APP_ROOT + '/app/utils/utils');
 const pg = require('pg');
 const Router = require('express-promise-router');
 const router = new Router();
-var dbConfig = require(APP_ROOT + '/config/db.js');
-var pool = new pg.Pool(dbConfig);
 
 module.exports = router;
 
@@ -23,3 +24,11 @@ router.delete('/delete', async (req, res) => {
     let deleted = await utils.delete.user(req.body.user, req.body.token, req.body.pass);
     res.send(deleted);
 });
+
+/*
+
+router.put('', async (req, res) => {
+
+});
+
+*/
