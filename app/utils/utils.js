@@ -144,7 +144,7 @@ const utilsNew = {
         post: async (token, threadName, title, body) => {
             let username = await dbUtils.get.usernameByToken(token);
             if (await utilsNew.check.token(username.rows[0].username, token)) {
-                let lastId = await dbUtils.get.postLastId(threadName);
+                let lastId = await dbUtils.get.lastId(threadName);
                 /*
                             insert post in thread table
                                                          threadName, id, username, text of post, title, date, min lvl to comment
@@ -159,10 +159,24 @@ const utilsNew = {
                 }
             }
         },
+        comment: async (token, threadName, postId, body) => {
+            let username = await dbUtils.get.usernameByToken(token);
+            if (await utilsNew.check.token(username.rows[0].username, token)) {
+                let lastId = await dbUtils.get.lastId(threadName+postId);
+                return await dbUtils.create.comment(threadName, postId, username.rows[0].username, body, 1, lastId.rows[0].id + 1);
+            }
+        },
 
     },
 
     delete: {
+        comment: async (token, threadName, postId, commentId) => {
+            let username = await dbUtils.get.usernameByToken(token);
+            if (await utilsNew.check.token(username.rows[0].username, token)) {
+                return await dbUtils.delete.comment(threadName, postId, commentId);
+            }
+        },
+
         /*
         !
         !       NEED REWRITE

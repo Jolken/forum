@@ -41,7 +41,7 @@ let dbUtils = {
             return pool.query(`SELECT name FROM threads WHERE name = '${name}';`)
 
         },
-        postLastId: async (thread) => {
+        lastId: async (thread) => {
             return await pool.query(`SELECT id FROM ${thread} ORDER BY id DESC LIMIT 1;`)
 
         },
@@ -56,13 +56,19 @@ let dbUtils = {
 
     },
     create: {
+        comment: async (thread, postid, username, body, date, id) => {
+            return pool.query(`INSERT INTO ${thread}${postid} VALUES ('${username}', '${body}', ${date}, ${id})`);
+        },
+
         user: async (username, password, token, lvl, date, email,) => {
             return await pool.query(`INSERT INTO users VALUES ('${username}','${password}','${token}',${lvl},${date},'${email}');`)
         },
+        
         thread: async (name) => {
             return await pool.query(`INSERT INTO threads VALUES ('${name}');`)
 
         },
+        
         threadTable: async (name) => {
             return await pool.query(`CREATE TABLE ${name} (
                         	id		serial,
@@ -73,9 +79,11 @@ let dbUtils = {
                         	minlvl	smallint
                         );`)
         },
+        
         post: async (thread ,id, owner, body, title, date, minlvl) => {
             return await pool.query(`INSERT INTO "${thread}" (id, owner, body, title, date, minlvl) VALUES (${id},'${owner}','${body}','${title}',${date},${minlvl})`);
         },
+        
         postTable: async (thread, id) => {
             return await pool.query(`CREATE TABLE "${thread}${id}"
             (
@@ -88,11 +96,13 @@ let dbUtils = {
 
 
     },
+    
     update: {
         token: async (username, token) => {
             return pool.query(`UPDATE users SET token = '${token}' WHERE username = '${username}'`)
         },
     },
+    
     delete: {
         user: async (username) => {
             return await pool.query(`DELETE FROM users WHERE username = '${username}'`)
@@ -105,7 +115,10 @@ let dbUtils = {
         },
         post: async (thread, id) => {
             return await pool.query(`DELETE FROM "${thread}" WHERE id=${id}`)
-        }
+        },
+        comment: async (thread, postId, commentId) => {
+            return await pool.query(`DELETE FROM ${thread}${postId} WHERE id=${commentId}`)
+        },
 
     }
 }

@@ -70,3 +70,19 @@ router.get('/:threadName/:postId/', async (req, res) => {
     }
     res.send(postNComments);
 });
+
+/*
+new comment
+*/
+router.post('/:threadName/:postId/', async (req, res) => {
+    let created = await utils.new.comment(req.body.token, req.params.threadName, req.params.postId, req.body.body);
+    res.send(created);
+});
+
+/*
+delete comment
+*/
+router.delete('/:threadName/:postId/:commentId', async (req, res) => {
+    let deleted = await utils.delete.comment(req.body.token, req.params.threadName, req.params.postId, req.params.commentId);
+    res.send(deleted);
+});
