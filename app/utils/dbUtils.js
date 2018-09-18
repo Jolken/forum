@@ -31,6 +31,10 @@ let dbUtils = {
             return await pool.query(`SELECT * FROM ${thread}`)
 
         },
+        postsId: async (thread) => {
+            return await pool.query(`SELECT id FROM ${thread}`)
+
+        },
         post: async (thread, id) => {
             return await pool.query(`SELECT * FROM ${thread} WHERE id = ${id}`);
         },
@@ -119,6 +123,11 @@ let dbUtils = {
         comment: async (thread, postId, commentId) => {
             return await pool.query(`DELETE FROM ${thread}${postId} WHERE id=${commentId}`)
         },
+        comments: async (thread, postId) => {
+            console.log(thread);
+            console.log(postId);
+            return await pool.query(`DELETE FROM ${thread}${postId}`)
+        },  
 
     }
 }

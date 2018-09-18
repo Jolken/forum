@@ -90,6 +90,12 @@ const utilsNew = {
         
             return dbResponse.rows;
         },
+
+        postsId: async (thread) => {
+            let dbResponse = await dbUtils.get.posts(thread);
+
+            return dbResponse.rows;
+        },
         
         post: async (thread, id) => {
             let dbResponse = await dbUtils.get.post(thread, id);
@@ -130,7 +136,10 @@ const utilsNew = {
                         /*
                                 create table with posts
                         */
-                        return await dbUtils.create.threadTable(threadName);
+                       let table =  await dbUtils.create.threadTable(threadName);
+                       if (table) {
+                           return dbUtils.create.post(threadName, 0, 0, 0, 0, 0, 4);
+                       }
                     }
                     else {
                         return 0;
@@ -177,6 +186,11 @@ const utilsNew = {
             }
         },
 
+        comments: async (thread, postId) => {
+            let dbResponse = await dbUtils.delete.comments(thread, postId);
+            return dbResponse;
+        },
+
         /*
         !
         !       NEED REWRITE
@@ -201,9 +215,14 @@ const utilsNew = {
         thread: async (token, username, threadName) => {
             if (username === ADMIN) {
                 if (await utilsNew.check.token(username, token)) {
-                    /*
-                            delete table with posts
-                    */
+                    let postsId = await utilsNew.get.postsId(threadName);
+                    
+                    let test = postsId.forEach(async (id) => {
+                        return await utilsNew.delete.post(threadName, id);
+                    });
+
+                    console.log(test);
+                                
                     let tableDeleted = await dbUtils.delete.table(threadName);
                     if (tableDeleted) {
                         /*
@@ -229,10 +248,11 @@ const utilsNew = {
             let username = await dbUtils.get.usernameByToken(token);
             let postOwner = await dbUtils.get.postOwner(threadName, postId);
             
-            if (username.rows[0].username === postOwner.rows[0].owner) {
-                let deleted = await dbUtils.delete.post(threadName, postId);
+            if ((username.rows[0].username === postOwner.rows[0].owner) || (username.rows[0].username === ADMIN)) {
+                let deletedComments = await utilsNew.delete.comments(threadName, postId);
+                let deletedFromThread = await dbUtils.delete.post(threadName, postId);
                 
-                if (deleted) {
+                if (deletedFromThread) {
                     return await dbUtils.delete.table(threadName+postId);
                 }
             }
