@@ -124,8 +124,6 @@ let dbUtils = {
             return await pool.query(`DELETE FROM ${thread}${postId} WHERE id=${commentId}`)
         },
         comments: async (thread, postId) => {
-            console.log(thread);
-            console.log(postId);
             return await pool.query(`DELETE FROM ${thread}${postId}`)
         },  
 

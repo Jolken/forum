@@ -216,13 +216,16 @@ const utilsNew = {
             if (username === ADMIN) {
                 if (await utilsNew.check.token(username, token)) {
                     let postsId = await utilsNew.get.postsId(threadName);
-                    
                     let test = postsId.forEach(async (id) => {
-                        return await utilsNew.delete.post(threadName, id);
+                        if (id.id >= 1) {
+                            return await utilsNew.delete.postNoCheck(threadName, id.id);
+                        }
+                        else {
+                            return 0;
+                        }
                     });
-
-                    console.log(test);
-                                
+                    
+                    
                     let tableDeleted = await dbUtils.delete.table(threadName);
                     if (tableDeleted) {
                         /*
@@ -233,6 +236,7 @@ const utilsNew = {
                     else {
                         return 0;
                     }
+                    
                 }
                 else {
                     return 0;
@@ -255,6 +259,14 @@ const utilsNew = {
                 if (deletedFromThread) {
                     return await dbUtils.delete.table(threadName+postId);
                 }
+            }
+        },
+        postNoCheck: async (threadName, postId) => {
+            let deletedComments = await utilsNew.delete.comments(threadName, postId);
+            let deletedFromThread = await dbUtils.delete.post(threadName, postId);
+    
+            if (deletedFromThread) {
+                return await dbUtils.delete.table(threadName + postId);
             }
         },
     },
