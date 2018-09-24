@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 new thread
 */
 router.post('/', async (req, res) => {
-    let newThread = await utils.new.thread(req.body.token, req.body.user, req.body.name);
+    let newThread = await utils.new.thread(req.body.token, req.body.username, req.body.name);
     res.send(newThread);
 
 });
@@ -28,37 +28,93 @@ delete thread
 */
 router.delete('/', async (req, res) => {
     let threadName = req.params.threadName || req.body.name;
-    let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
-    res.send(deleted);
+    let deleted = await utils.delete.thread(req.body.token, req.body.username, threadName);
+    if (deleted) {
+        res.send({
+            'status': "delete succesful",
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't delete",
+        });
+        res.sendStatus(400);
+    }
 });
 /*
 delete thread, too :D
 */
 router.delete('/:threadName', async (req, res) => {
     let threadName = req.params.threadName || req.body.name;
-    let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
-    res.send(deleted);
+    let deleted = await utils.delete.thread(req.body.token, req.body.username, threadName);
+    if (deleted) {
+        res.send({
+            'status': "delete succesful",
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't delete",
+        });
+        res.sendStatus(400);
+    }
 });
 /*
 get posts in thread
 */
 router.get('/:threadName/', async (req, res) => {
     let posts = await utils.get.posts(req.params.threadName);
-    res.send(posts);
+    if (posts) {
+        res.send({
+            'status': "success",
+            'data': posts
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't delete",
+        });
+        res.sendStatus(400);
+    }
 });
 /*
 new post
 */
 router.post('/:threadName/', async (req, res) => {
-    let created = await utils.new.post(req.body.token, req.params.threadName, req.body.title, req.body.text);
-    res.send(created);
+    let created = await utils.new.post(req.body.token, req.params.threadName, req.body.title, req.body.body);
+    if (created) {
+        res.send({
+            'status': "create succesful",
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't create",
+        });
+        res.sendStatus(400);
+    }
 });
 /*
 delete post
 */
 router.delete('/:threadName/:postId/', async (req, res) => {
-    let deleted = await utils.delete.post(req.body.token, req.params.threadName, req.params.postId);
-    res.send(deleted);
+    let deleted = await utils.delete.post(req.body.token, req.body.username, req.params.threadName, req.params.postId);
+    if (deleted) {
+        res.send({
+            'status': "delete succesful",
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't delete",
+        });
+        res.sendStatus(400);
+    }
 });
 /*
 get comments
@@ -76,7 +132,18 @@ new comment
 */
 router.post('/:threadName/:postId/', async (req, res) => {
     let created = await utils.new.comment(req.body.token, req.params.threadName, req.params.postId, req.body.body);
-    res.send(created);
+    if (created) {
+        res.send({
+            'status': "create succesful",
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't create",
+        });
+        res.sendStatus(400);
+    }
 });
 
 /*
@@ -84,5 +151,16 @@ delete comment
 */
 router.delete('/:threadName/:postId/:commentId', async (req, res) => {
     let deleted = await utils.delete.comment(req.body.token, req.params.threadName, req.params.postId, req.params.commentId);
-    res.send(deleted);
+    if (deleted) {
+        res.send({
+            'status': "delete succesful",
+        });
+        res.sendStatus(200);
+    }
+    else {
+        res.send({
+            status: "can't delete",
+        });
+        res.sendStatus(400);
+    }
 });

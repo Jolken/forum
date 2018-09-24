@@ -196,7 +196,7 @@ const utilsNew = {
         !       NEED REWRITE
         !
         */
-        user: async (username, token, password) => {
+        user: async (token, username, password) => {
             if (await utilsNew.check.token(username, token)) {
                 if (await utilsNew.check.password(username, password)) {
                     return await dbUtils.delete.user(username);
@@ -248,7 +248,7 @@ const utilsNew = {
         !   NEED REWRITE
         !
         */
-        post: async (token, threadName, postId) => {
+        post: async (token, username123, threadName, postId) => {
             let username = await dbUtils.get.usernameByToken(token);
             let postOwner = await dbUtils.get.postOwner(threadName, postId);
             
