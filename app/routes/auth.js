@@ -9,20 +9,18 @@ const router = new Router();
 module.exports = router;
 
 router.post('/login', async (req, res) => {
-    let token = await utils.functions.login(req.body.username, req.body.password);
+    let token = await utils.functions.login(req.body.user, req.body.pass);
     if (token) {
         res.send({
             'status': "login succesful",
             'token': token,
         });
 
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't login",
         });
-        res.sendStatus(400);
     }
 });
 
@@ -33,13 +31,11 @@ router.post('/register', async (req, res) => {
             'status': "register succesful",
             'token': token,
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't register",
         });
-        res.sendStatus(400);
     }
 });
 
@@ -50,13 +46,11 @@ router.delete('/delete', async (req, res) => {
         res.send({
             'status': "delete succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't delete",
         });
-        res.sendStatus(400);
     }
 });
 

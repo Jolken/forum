@@ -152,27 +152,34 @@ const utilsNew = {
         },
         post: async (token, threadName, title, body) => {
             let username = await dbUtils.get.usernameByToken(token);
-            if (await utilsNew.check.token(username.rows[0].username, token)) {
+            username = username.rows[0].username;
+            if (await utilsNew.check.token(username, token)) {
                 let lastId = await dbUtils.get.lastId(threadName);
+                lastId = lastId.rows[0].id + 1;
                 /*
                             insert post in thread table
                                                          threadName, id, username, text of post, title, date, min lvl to comment
                 */
-                let inserted = await dbUtils.create.post(threadName, lastId.rows[0].id+1, username.rows[0].username, body, title, 1, 1);
+                let inserted = await dbUtils.create.post(threadName, lastId, username, body, title, 1, 1);
                 if (inserted) {
                     /*
                             creates table with comments
                                                           theradName, postID
                     */
-                    return await dbUtils.create.postTable(threadName, lastId.rows[0].id+1);
+                    tableCreated =  await dbUtils.create.postTable(threadName, lastId);
+                }
+                if (tableCreated) {
+                    return dbUtils.create.comment(threadName, lastId, 0, 0, 0, 0)
                 }
             }
         },
         comment: async (token, threadName, postId, body) => {
             let username = await dbUtils.get.usernameByToken(token);
-            if (await utilsNew.check.token(username.rows[0].username, token)) {
-                let lastId = await dbUtils.get.lastId(threadName+postId);
-                return await dbUtils.create.comment(threadName, postId, username.rows[0].username, body, 1, lastId.rows[0].id + 1);
+            username = username.rows[0].username;
+            if (await utilsNew.check.token(username, token)) {
+                let lastId = await dbUtils.get.lastId(threadName + postId);
+                lastId = lastId.rows[0].id + 1;
+                return await dbUtils.create.comment(threadName, postId, username, body, 1, lastId);
             }
         },
 

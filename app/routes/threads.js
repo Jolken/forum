@@ -33,13 +33,11 @@ router.delete('/', async (req, res) => {
         res.send({
             'status': "delete succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't delete",
         });
-        res.sendStatus(400);
     }
 });
 /*
@@ -52,13 +50,11 @@ router.delete('/:threadName', async (req, res) => {
         res.send({
             'status': "delete succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't delete",
         });
-        res.sendStatus(400);
     }
 });
 /*
@@ -71,13 +67,11 @@ router.get('/:threadName/', async (req, res) => {
             'status': "success",
             'data': posts
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't delete",
         });
-        res.sendStatus(400);
     }
 });
 /*
@@ -89,13 +83,11 @@ router.post('/:threadName/', async (req, res) => {
         res.send({
             'status': "create succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't create",
         });
-        res.sendStatus(400);
     }
 });
 /*
@@ -107,13 +99,11 @@ router.delete('/:threadName/:postId/', async (req, res) => {
         res.send({
             'status': "delete succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't delete",
         });
-        res.sendStatus(400);
     }
 });
 /*
@@ -136,13 +126,11 @@ router.post('/:threadName/:postId/', async (req, res) => {
         res.send({
             'status': "create succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't create",
         });
-        res.sendStatus(400);
     }
 });
 
@@ -155,12 +143,10 @@ router.delete('/:threadName/:postId/:commentId', async (req, res) => {
         res.send({
             'status': "delete succesful",
         });
-        res.sendStatus(200);
     }
     else {
         res.send({
             status: "can't delete",
         });
-        res.sendStatus(400);
     }
 });

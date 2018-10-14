@@ -15,7 +15,6 @@ let dbUtils = {
 
         },
         password: async (username) => {
-            console.log(username);
             return await pool.query(`SELECT pass FROM users WHERE username = '${username}'`)
 
         },
