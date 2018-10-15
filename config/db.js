@@ -1,7 +1,4 @@
 module.exports = {
-    database: 'forum',
-    port: 5433,
-    host: 'localhost',
-    user: 'postgres',
-    password: 'qwerty'
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
 };;
