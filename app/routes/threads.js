@@ -45,7 +45,7 @@ delete thread, too :D
 */
 router.delete('/:threadName', async (req, res) => {
     let threadName = req.params.threadName || req.body.name;
-    let deleted = await utils.delete.thread(req.body.token, req.body.username, threadName);
+    let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
     if (deleted) {
         res.send({
             'status': "delete succesful",
@@ -94,7 +94,7 @@ router.post('/:threadName/', async (req, res) => {
 delete post
 */
 router.delete('/:threadName/:postId/', async (req, res) => {
-    let deleted = await utils.delete.post(req.body.token, req.body.username, req.params.threadName, req.params.postId);
+    let deleted = await utils.delete.post(req.body.token, req.body.user, req.params.threadName, req.params.postId);
     if (deleted) {
         res.send({
             'status': "delete succesful",
