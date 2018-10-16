@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 new thread
 */
 router.post('/', async (req, res) => {
-    let newThread = await utils.new.thread(req.body.token, req.body.username, req.body.name);
+    let newThread = await utils.new.thread(req.body.token, req.body.user, req.body.name);
     res.send(newThread);
 
 });
@@ -28,7 +28,7 @@ delete thread
 */
 router.delete('/', async (req, res) => {
     let threadName = req.params.threadName || req.body.name;
-    let deleted = await utils.delete.thread(req.body.token, req.body.username, threadName);
+    let deleted = await utils.delete.thread(req.body.token, req.body.user, threadName);
     if (deleted) {
         res.send({
             'status': "delete succesful",
