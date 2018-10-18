@@ -1,4 +1,2 @@
-./config
-./config/*.*
-./config/db.js
+config/db.js
 api.txt
