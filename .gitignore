@@ -1,3 +1,4 @@
 config
 config/*.*
+config/db.js
 api.txt
